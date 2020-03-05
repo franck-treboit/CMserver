@@ -31,7 +31,6 @@ var io = require('socket.io');
 const ioServer = io(server)
 
 
-
 // Quand un client se connecte, on le note dans la console
 ioServer.on('connection',  require("../config/socket"));
 
@@ -43,7 +42,9 @@ ioServer.on('connection',  require("../config/socket"));
  * Listen on provided port, on all network interfaces.
  */
 
-server.listen(port);
+server.listen(port, () =>{
+  console.log(`Server listening on http://localhost:${process.env.PORT}`)
+});
 server.on('error', onError);
 server.on('listening', onListening);
 

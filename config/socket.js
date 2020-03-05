@@ -6,6 +6,7 @@ let connectedUsers = {};
 let connectedUsers2 = [];
 
 module.exports = function(socket){
+    console.log("ici")
 
     socket.on('send-message', function(message){
       socket.broadcast.emit('message', message)
@@ -37,7 +38,7 @@ module.exports = function(socket){
 
     )
 
-
+ /*
     socket.on( "registerTel", function(username)
     {
         socket.username = username;
@@ -50,8 +51,30 @@ module.exports = function(socket){
         socket.emit('choixAffichageTel', data);
     }
     )
+    */
 
-    socket.on( "registerTel", function(username)
+        socket.on( "registerTel", function(username)
+            {
+                socket.username = username;
+                    console.log("hello")
+                connectedUsers[username] = socket;
+                let data = [] ;
+
+                const nom = getRandomName();
+                const pattern = getAvatar();
+                const colors = getColors();
+                const backgroundColor = colors[0];
+                const awesomeColor = colors[1]
+                data.push("you are now known as "+ nom ) ;
+                data.push(2) ;
+                data.push({nom, pattern,backgroundColor, awesomeColor})
+                socket.emit('choixAffichageTel', data);
+            }
+        )
+
+
+
+    socket.on( "envoiMediaTel", function(username)
     {
 
             let media = socket.media;
@@ -76,26 +99,7 @@ module.exports = function(socket){
     })   
 
     // émission du vote quand on demande un vote sur un média
-    socket.on( "callForVoteMedia", function(username)
-    {
-        let media = socket.media;
-        let resultFormDb;
-              mediaModel
-          .find()
-          .then(dbRes => {
-              const randomMedias = []
-              for(let i =0; i < 4; i++){
-                  let randomIndex = Math.floor(Math.random()*dbRes.length)
-                  let randomMedia = dbRes[randomIndex];
-                    randomMedias.push(randomMedia);
-                    dbRes.splice(randomIndex, 1);
-                }
-                socket.emit('send-media',randomMedias)
-          })
-          .catch(err => {
-              console.log(err)
-          });
-    })
+
 
     let monState = 0;
 
@@ -105,7 +109,28 @@ module.exports = function(socket){
     });
 
     socket.on('TelSequenceur', function(sequenceValue){
-        socket.broadcast.emit( 'sequence', sequenceValue);
+            console.log("sequence val ====>", sequenceValue)
+            let media = socket.media;
+            let resultFormDb;
+            mediaModel
+                .find()
+                .then(dbRes => {
+                    const randomMedias = []
+                    for(let i =0; i < 4; i++){
+                        let randomIndex = Math.floor(Math.random()*dbRes.length)
+                        let randomMedia = dbRes[randomIndex];
+                        randomMedias.push(randomMedia);
+                        dbRes.splice(randomIndex, 1);
+                    } ;
+                    let data = [] ;
+                    data.push(randomMedias) ;
+                    data.push(sequenceValue) ;
+                    console.log("#############", data)
+                    socket.broadcast.emit('choixAffichageTel', data)
+                })
+                .catch(err => {
+                    console.log(err)
+                });
     });
 
 
@@ -113,11 +138,15 @@ module.exports = function(socket){
         console.log(connectedUsers.length,"this is connected users")
         console.log("dans send votes")
         console.log(votes)
+        console.log(socket)
         //if ( monState < 2 ){
         //    connectedUsers["iamfront"].emit('choixAffichage', 2);
         //    monState = 3;
         //} else if ( monState == 3  ) {
         // let voteslist = [3, 5, 1, 5, 4];
+            //let votestab = [];
+            //votestab.push(votes);
+
             console.log("emetteur");
             connectedUsers["iamfront"].emit('votes', votes);
 
@@ -129,7 +158,7 @@ module.exports = function(socket){
 
     socket.on( "send-vote-media", function(media)
     {
-        console.log('lemedia', media);
+        console.log("on va envoyer ça à aside", media);
     }
     )
 };
