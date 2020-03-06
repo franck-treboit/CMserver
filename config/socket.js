@@ -138,10 +138,10 @@ module.exports = function(socket){
         console.log(connectedUsers.length,"this is connected users")
         console.log("dans send votes")
         console.log(votes)
-        console.log(socket)
+
         //if ( monState < 2 ){
         //    connectedUsers["iamfront"].emit('choixAffichage', 2);
-        //    monState = 3;
+            monState = 3;
         //} else if ( monState == 3  ) {
         // let voteslist = [3, 5, 1, 5, 4];
             //let votestab = [];
@@ -150,7 +150,7 @@ module.exports = function(socket){
             console.log("emetteur");
             connectedUsers["iamfront"].emit('votes', votes);
 
-            monState = 4;
+            //monState = 3;
         //} else if ( monState == 4 ){
         //    connectedUsers["iamfront"].emit('choixAffichage', 3);
         //}
