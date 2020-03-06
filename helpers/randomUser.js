@@ -6,7 +6,7 @@ function getRandomInt(max) {
 }
 // nom au hasard : un adjectif + un nom d'animal au hasard
 function randomWord(wordsArray) {
-    return wordsArray[getRandomInt(wordsArray.length) - 1]
+    return wordsArray[getRandomInt(wordsArray.length - 1) ]
 }
 function getRandomName() {
     let randomAdjective = randomWord(adjectives);
