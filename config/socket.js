@@ -135,9 +135,9 @@ module.exports = function(socket){
 
 
     socket.on('send-votes', function(votes){
-        console.log(connectedUsers.length,"this is connected users")
-        console.log("dans send votes")
-        console.log(votes)
+        // console.log(connectedUsers.length,"this is connected users")
+        // console.log("dans send votes")
+        // console.log(votes)
 
         //if ( monState < 2 ){
         //    connectedUsers["iamfront"].emit('choixAffichage', 2);
@@ -156,9 +156,10 @@ module.exports = function(socket){
         //}
     });
 
-    socket.on( "send-vote-media", function(media)
+    socket.on( "send-vote-media", function(trucsrecus)
     {
-        console.log("on va envoyer ça à aside", media);
+        // trucsrecus[0] c'est le média et trucsrecus[1] c'est l'utilisateur
+        connectedUsers["iamfront"].emit('media_choisi', trucsrecus);
     }
     )
 };
